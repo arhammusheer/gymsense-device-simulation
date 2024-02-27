@@ -11,4 +11,4 @@ COPY . /usr/src/app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run update_occupancy.py when the container launches
-CMD ["python", "./simulate.py"]
+CMD ["python", "./cron.py"]

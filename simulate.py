@@ -10,20 +10,19 @@ hub_key = os.getenv('HUB_KEY')
 device_id = os.getenv('DEVICE_ID')
 device_key = os.getenv('DEVICE_KEY')
 
-# Check if all required environment variables are set
-if not all([url, hub_id, hub_key, device_id, device_key]):
-    print("Error: One or more required environment variables are missing.")
-    print("Make sure GYMSENSE_URL, HUB_ID, HUB_KEY, DEVICE_ID, and DEVICE_KEY are set.")
-else:
-    # Decide randomly whether to send an update
+def send_update(url, hub_id, hub_key, device_id, device_key, old_battery_level, old_occupancy):
     should_send_update = random.choice([True, False])
 
     if should_send_update:
-        battery_level = random.randint(20, 100)  # Randomize for each run for simulation
-        # ensure battery between 0 and 1
-        battery_level = battery_level / 100
+        # Ol
+        battery_level = old_battery_level*1000 # For integer division
+        battery_level -= random.randint(0, 10)  # Simulate battery drain
+        battery_level = max(battery_level, 0)  # Ensure battery level is not negative
+        battery_level /= 1000  # Convert back to float
 
-        occupancy = random.choice([True, False])  # Generate random occupancy
+        # Simulate occupancy
+        occupancy = not old_occupancy
+
 
         # Prepare the data payload
         data = {
@@ -49,5 +48,21 @@ else:
             print("Debug")
             for history in response.history:
                 print(history.status_code, history.url, history.text)
+
+        return battery_level, occupancy
     else:
         print("No update sent this time.")
+        return old_battery_level, old_occupancy
+
+def check_env():
+    if not all([url, hub_id, hub_key, device_id, device_key]):
+        print("Error: One or more required environment variables are missing.")
+        print("Make sure GYMSENSE_URL, HUB_ID, HUB_KEY, DEVICE_ID, and DEVICE_KEY are set.")
+        exit(1)
+
+def send(old_battery_level, old_occupancy):
+    send_update(url, hub_id, hub_key, device_id, device_key, old_battery_level, old_occupancy)
+
+if __name__ == "__main__":
+    check_env()
+    send()
