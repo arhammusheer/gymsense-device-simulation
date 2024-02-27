@@ -20,6 +20,9 @@ else:
 
     if should_send_update:
         battery_level = random.randint(20, 100)  # Randomize for each run for simulation
+        # ensure battery between 0 and 1
+        battery_level = battery_level / 100
+
         occupancy = random.choice([True, False])  # Generate random occupancy
 
         # Prepare the data payload
@@ -31,17 +34,20 @@ else:
             "battery_level": battery_level,
             "occupancy": occupancy
         }
-        json_data = json.dumps(data)
 
         # Send the POST request
-        response = requests.post(url, json=json_data, headers={'Content-Type': 'application/json'})
+        response = requests.post(url, json=data)
 
         # Check if the request was successful
         if response.status_code == 200:
             print("Request successful!")
-            print(response.json())  # Optionally print the response data
+            json_response = response.json()
+            print(json.dumps(json_response, indent=2))
         else:
             print(f"Request failed with status code: {response.status_code}")
-            print(response.text)  # Optionally print the response text to understand what went wrong
+            print(response.json())  # Optionally print the response text to understand what went wrong
+            print("Debug")
+            for history in response.history:
+                print(history.status_code, history.url, history.text)
     else:
         print("No update sent this time.")
