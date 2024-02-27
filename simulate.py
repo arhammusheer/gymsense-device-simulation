@@ -71,7 +71,7 @@ def check_env():
         exit(1)
 
 def send(old_battery_level, old_occupancy):
-    send_update(url, hub_id, hub_key, device_id, device_key, old_battery_level, old_occupancy)
+    return send_update(url, hub_id, hub_key, device_id, device_key, old_battery_level, old_occupancy)
 
 if __name__ == "__main__":
     check_env()
