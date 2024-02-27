@@ -1,6 +1,7 @@
 import requests
 import random
 import os
+import json
 
 # Fetching URL and credentials from environment variables
 url = os.getenv('GYMSENSE_URL')
@@ -30,9 +31,10 @@ else:
             "battery_level": battery_level,
             "occupancy": occupancy
         }
+        json_data = json.dumps(data)
 
         # Send the POST request
-        response = requests.post(url, json=data)
+        response = requests.post(url, json=json_data, headers={'Content-Type': 'application/json'})
 
         # Check if the request was successful
         if response.status_code == 200:
