@@ -12,7 +12,6 @@ def get_store(key):
 	return store[key]
 
 def job():
-		print("New event")
 		check_env()
 
 		battery_level = get_store('battery_level')
@@ -38,4 +37,4 @@ if __name__ == '__main__':
 		while True:
 			schedule.run_pending()
 			time.sleep(1)
-			
+
