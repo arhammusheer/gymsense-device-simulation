@@ -1,6 +1,6 @@
 import schedule
 import time
-from simulate import send, check_env
+from simulate import send, check_env, simulate_battery_depletion, flip_old_occupancy
 
 # Store
 store = {}
@@ -29,7 +29,11 @@ if __name__ == '__main__':
 		# Initialize the store
 		update_store('battery_level', 1.0)
 		update_store('occupancy', False)
-		
+
+		print("Starting the cron job...")
+		print(get_store('battery_level'))
+		print(get_store('occupancy'))
+			
 		# Schedule the job
 		schedule.every(1).minutes.do(job)
 

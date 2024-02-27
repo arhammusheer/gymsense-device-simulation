@@ -10,18 +10,28 @@ hub_key = os.getenv('HUB_KEY')
 device_id = os.getenv('DEVICE_ID')
 device_key = os.getenv('DEVICE_KEY')
 
+def simulate_battery_depletion(old_battery_level):
+    # Simulate battery depletion
+    battery_level = old_battery_level*1000 # For integer division
+    battery_level -= random.randint(0, 10)  # Simulate battery drain
+    battery_level = max(battery_level, 0)  # Ensure battery level is not negative
+    battery_level /= 1000  # Convert back to float
+
+    return battery_level
+
+def flip_old_occupancy(old_occupancy):
+    return not old_occupancy
+
+
 def send_update(url, hub_id, hub_key, device_id, device_key, old_battery_level, old_occupancy):
     should_send_update = random.choice([True, False])
 
     if should_send_update:
-        # Ol
-        battery_level = old_battery_level*1000 # For integer division
-        battery_level -= random.randint(0, 10)  # Simulate battery drain
-        battery_level = max(battery_level, 0)  # Ensure battery level is not negative
-        battery_level /= 1000  # Convert back to float
+        # Simulate battery depletion
+        battery_level = simulate_battery_depletion(old_battery_level)
 
         # Simulate occupancy
-        occupancy = not old_occupancy
+        occupancy = flip_old_occupancy(old_occupancy)
 
 
         # Prepare the data payload
