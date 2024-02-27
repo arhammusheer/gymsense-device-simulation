@@ -26,9 +26,16 @@ def job():
 		print(f"Updated occupancy: {occupancy}")
 		
 		
+if __name__ == '__main__':
+		# Initialize the store
+		update_store('battery_level', 1.0)
+		update_store('occupancy', False)
+		
+		# Schedule the job
+		schedule.every(1).minutes.do(job)
 
-schedule.every(1).minute.do(job)
-
-while True:
-		schedule.run_pending()
-		time.sleep(1)
+		# Run the job
+		while True:
+			schedule.run_pending()
+			time.sleep(1)
+			
